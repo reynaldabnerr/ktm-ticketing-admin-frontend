@@ -4,17 +4,23 @@ import axios from "axios";
 function AdminDashboard() {
   const [tickets, setTickets] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get(
+  // Fungsi untuk mengambil daftar tiket dari backend
+  const fetchTickets = async () => {
+    try {
+      const response = await axios.get(
         "https://ktm-ticketing-backend-production.up.railway.app/tickets/all"
-      )
-      .then((response) => {
-        setTickets(response.data.tickets);
-      })
-      .catch((error) => {
-        console.error("Gagal mengambil data tiket:", error);
-      });
+      );
+      setTickets(response.data.tickets);
+    } catch (error) {
+      console.error("❌ Gagal mengambil data tiket:", error);
+    }
+  };
+
+  // Ambil data tiket setiap 5 detik untuk memperbarui status "Hadir"
+  useEffect(() => {
+    fetchTickets(); // Ambil data pertama kali
+    const interval = setInterval(fetchTickets, 5000); // Update setiap 5 detik
+    return () => clearInterval(interval); // Hapus interval saat komponen di-unmount
   }, []);
 
   return (
@@ -54,7 +60,9 @@ function AdminDashboard() {
                     "❌ Tidak Ada QR"
                   )}
                 </td>
-                <td>{ticket.hadir ? "✅ Hadir" : "❌ Belum Hadir"}</td>
+                <td style={{ color: ticket.hadir ? "green" : "red" }}>
+                  {ticket.hadir ? "✅ Hadir" : "❌ Belum Hadir"}
+                </td>
               </tr>
             ))
           ) : (
