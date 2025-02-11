@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import QrScanner from "react-qr-scanner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import untuk redirect
@@ -7,8 +7,17 @@ function QRCodeScanner() {
   const [scanResult, setScanResult] = useState(null);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [scanning, setScanning] = useState(true); // State untuk mengontrol scanner
-  const navigate = useNavigate(); // Hook untuk navigasi halaman
+  const [scanning, setScanning] = useState(true);
+  const [cameraMode, setCameraMode] = useState("user"); // Default pakai webcam
+  const navigate = useNavigate();
+
+  // 🔍 Deteksi apakah perangkat adalah HP atau laptop
+  useEffect(() => {
+    const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+    if (isMobile) {
+      setCameraMode("environment"); // Pakai kamera belakang jika di HP
+    }
+  }, []);
 
   const handleScan = async (data) => {
     if (data && scanning) {
@@ -83,6 +92,9 @@ function QRCodeScanner() {
           onError={handleError}
           onScan={handleScan}
           style={{ width: "300px" }}
+          constraints={{
+            video: { facingMode: cameraMode }, // Gunakan kamera yang sesuai dengan perangkat
+          }}
         />
       )}
 
