@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./AdminDashboard.css"; // Import file CSS untuk styling
+import "./AdminDashboard.css"; // Import CSS
 
 function AdminDashboard() {
   const [tickets, setTickets] = useState([]);
   const [selectedQR, setSelectedQR] = useState(null);
   const [selectedBukti, setSelectedBukti] = useState(null);
+  const [ticketIdInput, setTicketIdInput] = useState(""); // 🔥 Inputan Ticket ID
+  const [showInput, setShowInput] = useState(null); // 🔥 Menentukan input yang muncul
 
-  // Fungsi untuk mengambil daftar tiket dari backend
+  // Fungsi mengambil daftar tiket
   const fetchTickets = async () => {
     try {
       const response = await axios.get(
@@ -19,20 +21,30 @@ function AdminDashboard() {
     }
   };
 
-  // Fungsi untuk menandai hadir secara manual
-  const markAsPresent = async (ticketId) => {
+  // Fungsi untuk menandai hadir dengan input Ticket ID
+  const markAsPresent = async () => {
+    if (!ticketIdInput.trim()) {
+      alert("⚠️ Masukkan Ticket ID terlebih dahulu!");
+      return;
+    }
+
     try {
-      await axios.post(
-        "https://ktm-ticketing-backend-production.up.railway.app/tickets/mark-present",
-        { ticketId }
+      console.log("📤 Mengirim ticketId ke backend:", ticketIdInput);
+      const response = await axios.post(
+        "https://ktm-ticketing-backend-production.up.railway.app/tickets/check-in",
+        { ticketId: ticketIdInput }
       );
-      fetchTickets(); // Refresh data setelah update
+
+      alert(response.data.message); // Notifikasi sukses
+      setTicketIdInput(""); // Kosongkan input setelah submit
+      setShowInput(null); // Tutup input field
+      fetchTickets(); // Refresh daftar tiket
     } catch (error) {
       console.error("❌ Gagal memperbarui status hadir:", error);
+      alert(error.response?.data?.message || "❌ Gagal melakukan check-in!");
     }
   };
 
-  // Ambil data tiket setiap 5 detik untuk memperbarui status "Hadir"
   useEffect(() => {
     fetchTickets();
     const interval = setInterval(fetchTickets, 5000);
@@ -105,12 +117,33 @@ function AdminDashboard() {
                   </td>
                   <td>
                     {!ticket.hadir && (
-                      <button
-                        className="hadir-button"
-                        onClick={() => markAsPresent(ticket.ticketId)}
-                      >
-                        ✔️ Tandai Hadir
-                      </button>
+                      <>
+                        {/* 🔥 Tombol untuk menampilkan input Ticket ID */}
+                        <button
+                          className="hadir-button"
+                          onClick={() => setShowInput(ticket.ticketId)}
+                        >
+                          ✔️ Tandai Hadir
+                        </button>
+
+                        {/* 🔥 Input Ticket ID hanya muncul jika tombol ditekan */}
+                        {showInput === ticket.ticketId && (
+                          <div>
+                            <input
+                              type="text"
+                              placeholder="Masukkan Ticket ID"
+                              value={ticketIdInput}
+                              onChange={(e) => setTicketIdInput(e.target.value)}
+                            />
+                            <button
+                              className="submit-button"
+                              onClick={markAsPresent}
+                            >
+                              ✅ Konfirmasi
+                            </button>
+                          </div>
+                        )}
+                      </>
                     )}
                   </td>
                 </tr>
