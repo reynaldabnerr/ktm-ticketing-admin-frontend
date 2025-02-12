@@ -4,7 +4,8 @@ import "./AdminDashboard.css"; // Import file CSS untuk styling
 
 function AdminDashboard() {
   const [tickets, setTickets] = useState([]);
-  const [selectedQR, setSelectedQR] = useState(null); // State untuk modal QR Code
+  const [selectedQR, setSelectedQR] = useState(null);
+  const [selectedBukti, setSelectedBukti] = useState(null);
 
   // Fungsi untuk mengambil daftar tiket dari backend
   const fetchTickets = async () => {
@@ -15,6 +16,19 @@ function AdminDashboard() {
       setTickets(response.data.tickets);
     } catch (error) {
       console.error("❌ Gagal mengambil data tiket:", error);
+    }
+  };
+
+  // Fungsi untuk menandai hadir secara manual
+  const markAsPresent = async (ticketId) => {
+    try {
+      await axios.post(
+        "https://ktm-ticketing-backend-production.up.railway.app/tickets/mark-present",
+        { ticketId }
+      );
+      fetchTickets(); // Refresh data setelah update
+    } catch (error) {
+      console.error("❌ Gagal memperbarui status hadir:", error);
     }
   };
 
@@ -46,7 +60,9 @@ function AdminDashboard() {
               <th>No HP</th>
               <th>Ticket ID</th>
               <th>QR Code</th>
+              <th>Bukti Transfer</th>
               <th>Hadir</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -64,10 +80,22 @@ function AdminDashboard() {
                         src={ticket.qrCode}
                         alt="QR Code"
                         className="qr-image"
-                        onClick={() => setSelectedQR(ticket.qrCode)} // Klik untuk memperbesar
+                        onClick={() => setSelectedQR(ticket.qrCode)}
                       />
                     ) : (
                       "❌ Tidak Ada QR"
+                    )}
+                  </td>
+                  <td>
+                    {ticket.buktiTransfer ? (
+                      <img
+                        src={ticket.buktiTransfer}
+                        alt="Bukti Transfer"
+                        className="bukti-image"
+                        onClick={() => setSelectedBukti(ticket.buktiTransfer)}
+                      />
+                    ) : (
+                      "❌ Tidak Ada Bukti"
                     )}
                   </td>
                   <td
@@ -75,11 +103,21 @@ function AdminDashboard() {
                   >
                     {ticket.hadir ? "✅ Hadir" : "❌ Belum Hadir"}
                   </td>
+                  <td>
+                    {!ticket.hadir && (
+                      <button
+                        className="hadir-button"
+                        onClick={() => markAsPresent(ticket.ticketId)}
+                      >
+                        ✔️ Tandai Hadir
+                      </button>
+                    )}
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="no-data">
+                <td colSpan="9" className="no-data">
                   ⚠️ Tidak ada tiket ditemukan
                 </td>
               </tr>
@@ -93,6 +131,15 @@ function AdminDashboard() {
         <div className="qr-modal" onClick={() => setSelectedQR(null)}>
           <div className="qr-modal-content">
             <img src={selectedQR} alt="QR Code Besar" />
+          </div>
+        </div>
+      )}
+
+      {/* Modal Popup untuk Bukti Transfer */}
+      {selectedBukti && (
+        <div className="bukti-modal" onClick={() => setSelectedBukti(null)}>
+          <div className="bukti-modal-content">
+            <img src={selectedBukti} alt="Bukti Transfer Besar" />
           </div>
         </div>
       )}
