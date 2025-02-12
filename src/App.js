@@ -1,20 +1,14 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import AdminDashboard from "./AdminDashboard";
-import QRCodeScanner from "./QRCodeScanner";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./Navbar"; // Import Navbar
+import AdminDashboard from "./AdminDashboard"; // Import Admin Dashboard
+import QRCodeScanner from "./QRCodeScanner"; // Import QR Scanner
 
 function App() {
   return (
     <Router>
-      <div>
-        <h1>🎟️ KTM Ticketing System</h1>
-
-        {/* Navigation Menu */}
-        <nav>
-          <Link to="/">🏠 Admin Dashboard</Link> |
-          <Link to="/scan">📷 Scan QR</Link>
-        </nav>
-
+      <Navbar />
+      <div className="container">
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
           <Route path="/scan" element={<QRCodeScanner />} />
