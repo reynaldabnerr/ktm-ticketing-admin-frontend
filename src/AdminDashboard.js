@@ -22,6 +22,27 @@ function AdminDashboard() {
     }
   };
 
+  // Fungsi untuk menghapus tiket berdasarkan ticketId
+  const deleteTicket = async (ticketId) => {
+    const confirmDelete = window.confirm(
+      "Apakah Anda yakin ingin menghapus tiket ini?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      console.log("🗑️ Menghapus tiket:", ticketId);
+      const response = await axios.delete(
+        `https://ktm-ticketing-backend-production.up.railway.app/tickets/delete-ticket/${ticketId}`
+      );
+
+      alert(response.data.message);
+      fetchTickets(); // Refresh daftar tiket setelah dihapus
+    } catch (error) {
+      console.error("❌ Gagal menghapus tiket:", error);
+      alert(error.response?.data?.message || "❌ Gagal menghapus tiket!");
+    }
+  };
+
   // Fungsi untuk menandai hadir
   const markAsPresent = async (ticketId) => {
     if (isSubmitting) return;
@@ -118,7 +139,7 @@ function AdminDashboard() {
                   <td>
                     {!ticket.hadir && (
                       <>
-                        {/* 🔥 Tombol untuk menampilkan input Ticket ID */}
+                        {/* Tombol untuk menampilkan input Ticket ID */}
                         <button
                           className="hadir-button"
                           onClick={() => {
@@ -129,7 +150,7 @@ function AdminDashboard() {
                           ✔️ Tandai Hadir
                         </button>
 
-                        {/* 🔥 Input Ticket ID hanya muncul jika tombol ditekan */}
+                        {/* Input Ticket ID hanya muncul jika tombol ditekan */}
                         {showInput === ticket.ticketId && (
                           <div>
                             <input
@@ -148,6 +169,14 @@ function AdminDashboard() {
                         )}
                       </>
                     )}
+
+                    {/* 🔥 Tombol Delete Ticket */}
+                    <button
+                      className="delete-button"
+                      onClick={() => deleteTicket(ticket.ticketId)}
+                    >
+                      🗑️ Hapus
+                    </button>
                   </td>
                 </tr>
               ))

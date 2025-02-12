@@ -204,6 +204,22 @@ input[type="text"]:focus {
     /* 🔥 Supaya gambar tidak terpotong */
 }
 
+.delete-button {
+    background: #ff4d4d;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: background 0.3s ease-in-out;
+}
+
+.delete-button:hover {
+    background: #d63031;
+}
+
 /* 📱 Responsiveness untuk HP */
 @media screen and (max-width: 768px) {
     .image-modal-content {
