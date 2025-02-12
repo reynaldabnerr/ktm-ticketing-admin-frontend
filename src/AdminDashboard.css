@@ -1,134 +1,254 @@
-/* Container Admin */
+/* 🌟 Admin Dashboard Styles */
 .admin-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
     text-align: center;
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    padding-top: 20px;
-    /* Tambahkan jarak dari navbar */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
 }
 
-/* Tombol Export ke Excel */
+/* 🎟️ Title */
+.admin-container h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #000000;
+}
+
+/* 📥 Export Button */
 .export-button {
     background-color: #28a745;
     color: white;
-    padding: 8px 16px;
-    font-size: 14px;
     border: none;
-    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
     cursor: pointer;
-    margin-bottom: 10px;
+    border-radius: 5px;
     transition: background 0.3s ease;
+    margin-bottom: 20px;
 }
 
 .export-button:hover {
     background-color: #218838;
 }
 
-/* Container untuk tabel agar bisa di-scroll di HP */
+/* 🏛️ Table Container */
 .table-container {
-    width: 100%;
     overflow-x: auto;
-    /* Tambahkan scroll horizontal di layar kecil */
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
-/* Styling untuk tabel */
+/* 📊 Table Styles */
 .styled-table {
     width: 100%;
-    min-width: 600px;
-    /* Jangan terlalu kecil agar tetap terbaca */
     border-collapse: collapse;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 14px;
-    /* Perkecil font agar lebih compact */
+    font-size: 16px;
+    background-color: white;
 }
 
-/* Header tabel */
+.styled-table th,
+.styled-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
 .styled-table th {
     background-color: #007bff;
     color: white;
-    padding: 8px;
-    text-align: center;
+    font-weight: 600;
 }
 
-/* Body tabel */
-.styled-table td {
-    border: 1px solid #ddd;
-    padding: 6px;
-    /* Perkecil padding */
-    text-align: center;
-}
-
-/* Warna selang-seling */
-.styled-table tbody tr:nth-child(even) {
+.styled-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-/* Hover efek */
-.styled-table tbody tr:hover {
+.styled-table tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Styling QR Code */
-.qr-image {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    border-radius: 5px;
-    cursor: pointer;
-    /* Tambahkan cursor pointer untuk klik */
-    transition: transform 0.2s ease-in-out;
+/* ✅ Status Hadir */
+.status-hadir {
+    color: #28a745;
+    font-weight: 600;
 }
 
-.qr-image:hover {
+/* ❌ Status Belum Hadir */
+.status-belum {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* 📷 QR Code & Bukti Transfer */
+.qr-image,
+.bukti-image {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    border-radius: 5px;
+}
+
+.qr-image:hover,
+.bukti-image:hover {
     transform: scale(1.1);
 }
 
-/* Modal Popup QR */
-.qr-modal {
+/* 🔘 Hadir Button */
+.hadir-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.hadir-button:hover {
+    background-color: #0056b3;
+}
+
+/* 📝 Input Field */
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 80%;
+    margin: 10px 0;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* ✅ Submit Button */
+.submit-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #218838;
+}
+
+/* ⚠️ No Data Message */
+.no-data {
+    font-size: 18px;
+    color: #dc3545;
+    font-weight: 600;
+    text-align: center;
+    padding: 20px;
+}
+
+/* 🔍 Image Modal */
+.image-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    /* 🔥 Blur Background */
+    background: rgba(136, 136, 136, 0.5);
+    /* Transparan Gelap */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 🖼️ Kontainer Modal */
+.image-modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    /* 🔥 Warna putih semi-transparan */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    max-width: 50vw;
+    /* 🔥 Maksimal lebar viewport */
+    max-height: 50vh;
+    /* 🔥 Maksimal tinggi viewport */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    overflow: hidden;
 }
 
-.qr-modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    max-width: 90%;
-}
-
-.qr-modal-content img {
-    width: 300px;
-    height: 300px;
+/* 🖼️ Gambar dalam Modal */
+.image-modal-content img {
+    width: 50vw;
+    /* 🔥 90% dari layar */
+    height: auto;
+    /* 🔥 Auto scale */
+    max-width: 250px;
+    /* 🔥 Maksimal 800px */
+    max-height: 50vh;
+    /* 🔥 Maksimal 85% dari tinggi layar */
+    border-radius: 12px;
     object-fit: contain;
+    /* 🔥 Supaya gambar tidak terpotong */
 }
 
-.qr-modal:hover {
-    cursor: pointer;
+/* 📱 Responsiveness untuk HP */
+@media screen and (max-width: 768px) {
+    .image-modal-content {
+        max-width: 95%;
+        max-height: 85%;
+    }
+
+    .image-modal-content img {
+        max-width: 90%;
+        max-height: 70vh;
+    }
 }
 
-/* Responsif untuk HP */
-@media (max-width: 768px) {
-    .styled-table {
-        font-size: 12px;
-        /* Lebih kecil di HP */
+/* 🔥 Animasi Fade-In */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 📱 Responsiveness */
+@media screen and (max-width: 768px) {
+    .admin-container {
+        padding: 10px;
     }
 
     .styled-table th,
     .styled-table td {
-        padding: 5px;
+        font-size: 14px;
+        padding: 10px;
     }
 
-    .qr-image {
-        width: 50px;
-        height: 50px;
+    .qr-image,
+    .bukti-image {
+        width: 40px;
+        height: 40px;
+    }
+
+    input[type="text"] {
+        width: 90%;
     }
 }

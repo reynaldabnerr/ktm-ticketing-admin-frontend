@@ -7,7 +7,7 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <h1 className="logo">🎟️ KTM Ticketing</h1>
+      <h1 className="logo">KTM Ticketing</h1>
 
       {/* Tombol Burger Menu (Hanya muncul di HP) */}
       <div className="burger-menu" onClick={() => setIsOpen(!isOpen)}>

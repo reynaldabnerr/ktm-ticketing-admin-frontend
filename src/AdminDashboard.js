@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./AdminDashboard.css"; // Import CSS
+import "./AdminDashboard.css"; // Import file CSS
 
 function AdminDashboard() {
   const [tickets, setTickets] = useState([]);
   const [selectedQR, setSelectedQR] = useState(null);
   const [selectedBukti, setSelectedBukti] = useState(null);
-  const [ticketIdInput, setTicketIdInput] = useState(""); // 🔥 Inputan Ticket ID
-  const [showInput, setShowInput] = useState(null); // 🔥 Menentukan input yang muncul
+  const [ticketIdInput, setTicketIdInput] = useState(""); // Input Ticket ID
+  const [showInput, setShowInput] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Fungsi mengambil daftar tiket
+  // Fungsi mengambil daftar tiket dari backend
   const fetchTickets = async () => {
     try {
       const response = await axios.get(
@@ -21,27 +22,26 @@ function AdminDashboard() {
     }
   };
 
-  // Fungsi untuk menandai hadir dengan input Ticket ID
-  const markAsPresent = async () => {
-    if (!ticketIdInput.trim()) {
-      alert("⚠️ Masukkan Ticket ID terlebih dahulu!");
-      return;
-    }
+  // Fungsi untuk menandai hadir
+  const markAsPresent = async (ticketId) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     try {
-      console.log("📤 Mengirim ticketId ke backend:", ticketIdInput);
+      console.log("📤 Mengirim ticketId ke backend:", ticketId);
       const response = await axios.post(
         "https://ktm-ticketing-backend-production.up.railway.app/tickets/check-in",
-        { ticketId: ticketIdInput }
+        { ticketId }
       );
 
-      alert(response.data.message); // Notifikasi sukses
-      setTicketIdInput(""); // Kosongkan input setelah submit
-      setShowInput(null); // Tutup input field
+      alert(response.data.message);
+      setShowInput(null);
       fetchTickets(); // Refresh daftar tiket
     } catch (error) {
       console.error("❌ Gagal memperbarui status hadir:", error);
       alert(error.response?.data?.message || "❌ Gagal melakukan check-in!");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -53,7 +53,7 @@ function AdminDashboard() {
 
   return (
     <div className="admin-container">
-      <h2>🎟️ Daftar Peserta Event</h2>
+      <h2>Daftar Peserta Event</h2>
 
       <a
         href="https://ktm-ticketing-backend-production.up.railway.app/tickets/export-excel"
@@ -121,7 +121,10 @@ function AdminDashboard() {
                         {/* 🔥 Tombol untuk menampilkan input Ticket ID */}
                         <button
                           className="hadir-button"
-                          onClick={() => setShowInput(ticket.ticketId)}
+                          onClick={() => {
+                            setShowInput(ticket.ticketId);
+                            setTicketIdInput(ticket.ticketId);
+                          }}
                         >
                           ✔️ Tandai Hadir
                         </button>
@@ -137,7 +140,7 @@ function AdminDashboard() {
                             />
                             <button
                               className="submit-button"
-                              onClick={markAsPresent}
+                              onClick={() => markAsPresent(ticketIdInput)}
                             >
                               ✅ Konfirmasi
                             </button>
@@ -161,8 +164,8 @@ function AdminDashboard() {
 
       {/* Modal Popup untuk QR Code */}
       {selectedQR && (
-        <div className="qr-modal" onClick={() => setSelectedQR(null)}>
-          <div className="qr-modal-content">
+        <div className="image-modal" onClick={() => setSelectedQR(null)}>
+          <div className="image-modal-content">
             <img src={selectedQR} alt="QR Code Besar" />
           </div>
         </div>
@@ -170,8 +173,8 @@ function AdminDashboard() {
 
       {/* Modal Popup untuk Bukti Transfer */}
       {selectedBukti && (
-        <div className="bukti-modal" onClick={() => setSelectedBukti(null)}>
-          <div className="bukti-modal-content">
+        <div className="image-modal" onClick={() => setSelectedBukti(null)}>
+          <div className="image-modal-content">
             <img src={selectedBukti} alt="Bukti Transfer Besar" />
           </div>
         </div>
