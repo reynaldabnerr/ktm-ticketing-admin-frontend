@@ -1,21 +1,41 @@
+/* Navbar Container */
 .navbar {
     display: flex;
     justify-content: space-between;
+    /* Jarak antara logo dan menu */
     align-items: center;
     background-color: #007bff;
     padding: 15px 20px;
     color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    /* Pastikan padding tidak membuat navbar kepanjangan */
 }
 
+/* Tambahkan margin agar konten tidak tertutup */
+body {
+    margin-top: 60px;
+    /* Sesuaikan dengan tinggi navbar */
+}
+
+/* Logo */
 .logo {
     font-size: 22px;
     font-weight: bold;
 }
 
+/* Navigasi Links */
 .nav-links {
     list-style: none;
     display: flex;
     gap: 20px;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-links li {
@@ -27,8 +47,49 @@
     color: white;
     font-size: 18px;
     transition: 0.3s;
+    padding: 10px 15px;
+    /* Beri jarak lebih enak */
 }
 
 .nav-links a:hover {
     color: #ffd700;
+}
+
+/* Burger Menu (untuk HP) */
+.burger-menu {
+    font-size: 24px;
+    cursor: pointer;
+    display: none;
+    /* Default disembunyikan di desktop */
+}
+
+/* Responsif untuk HP */
+@media (max-width: 768px) {
+    .burger-menu {
+        display: block;
+        /* Tampilkan burger menu di layar kecil */
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: #007bff;
+        flex-direction: column;
+        text-align: center;
+        display: none;
+        /* Sembunyikan menu saat belum dibuka */
+        padding: 15px 0;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-links.open {
+        display: flex;
+        /* Tampilkan menu saat burger diklik */
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+    }
 }
