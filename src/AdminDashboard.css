@@ -220,6 +220,28 @@ input[type="text"]:focus {
     background: #d63031;
 }
 
+/* ✨ Efek Glow untuk Tiket yang Berubah */
+.highlight-hadir {
+    animation: glowEffect 1.5s ease-in-out;
+}
+
+@keyframes glowEffect {
+    0% {
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+        background-color: #eaffea;
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(0, 255, 0, 1);
+        background-color: #c3f3c3;
+    }
+
+    100% {
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+        background-color: #eaffea;
+    }
+}
+
 /* 📱 Responsiveness untuk HP */
 @media screen and (max-width: 768px) {
     .image-modal-content {

@@ -9,6 +9,14 @@ function AdminDashboard() {
   const [ticketIdInput, setTicketIdInput] = useState(""); // Input Ticket ID
   const [showInput, setShowInput] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [prevTickets, setPrevTickets] = useState([]); // Menyimpan tiket lama
+  const [highlightedTicket, setHighlightedTicket] = useState(null); // Tiket yang berubah statusnya
+
+  useEffect(() => {
+    fetchTickets(); // Jalankan sekali saat komponen dimuat
+    const interval = setInterval(fetchTickets, 3000); // Jalankan setiap 3 detik
+    return () => clearInterval(interval); // Bersihkan interval saat komponen di-unmount
+  }, []);
 
   // Fungsi mengambil daftar tiket dari backend
   const fetchTickets = async () => {
@@ -16,7 +24,26 @@ function AdminDashboard() {
       const response = await axios.get(
         "https://ktm-ticketing-backend-production.up.railway.app/tickets/all"
       );
-      setTickets(response.data.tickets);
+      const newTickets = response.data.tickets;
+
+      // Bandingkan status tiket lama dan baru
+      newTickets.forEach((newTicket) => {
+        const oldTicket = prevTickets.find(
+          (t) => t.ticketId === newTicket.ticketId
+        );
+
+        // Jika status berubah dari "Belum Hadir" ke "Hadir"
+        if (oldTicket && !oldTicket.hadir && newTicket.hadir) {
+          console.log("🔥 Tiket berubah status:", newTicket.ticketId);
+          setHighlightedTicket(newTicket.ticketId);
+
+          // Hapus efek setelah 3 detik
+          setTimeout(() => setHighlightedTicket(null), 3000);
+        }
+      });
+
+      setTickets(newTickets);
+      setPrevTickets(newTickets); // Simpan data lama untuk perbandingan berikutnya
     } catch (error) {
       console.error("❌ Gagal mengambil data tiket:", error);
     }
@@ -58,6 +85,12 @@ function AdminDashboard() {
       alert(response.data.message);
       setShowInput(null);
       fetchTickets(); // Refresh daftar tiket
+
+      // 🔥 Tambahkan efek menyala ke seluruh baris
+      setHighlightedTicket(ticketId);
+
+      // 🔥 Hapus efek setelah 3 detik
+      setTimeout(() => setHighlightedTicket(null), 3000);
     } catch (error) {
       console.error("❌ Gagal memperbarui status hadir:", error);
       alert(error.response?.data?.message || "❌ Gagal melakukan check-in!");
@@ -101,7 +134,14 @@ function AdminDashboard() {
           <tbody>
             {tickets.length > 0 ? (
               tickets.map((ticket, index) => (
-                <tr key={ticket.ticketId}>
+                <tr
+                  key={ticket.ticketId}
+                  className={
+                    highlightedTicket === ticket.ticketId
+                      ? "highlight-hadir"
+                      : ""
+                  }
+                >
                   <td>{index + 1}</td>
                   <td>{ticket.nama}</td>
                   <td>{ticket.email}</td>
@@ -139,7 +179,6 @@ function AdminDashboard() {
                   <td>
                     {!ticket.hadir && (
                       <>
-                        {/* Tombol untuk menampilkan input Ticket ID */}
                         <button
                           className="hadir-button"
                           onClick={() => {
@@ -150,7 +189,6 @@ function AdminDashboard() {
                           ✔️ Tandai Hadir
                         </button>
 
-                        {/* Input Ticket ID hanya muncul jika tombol ditekan */}
                         {showInput === ticket.ticketId && (
                           <div>
                             <input
@@ -170,7 +208,6 @@ function AdminDashboard() {
                       </>
                     )}
 
-                    {/* 🔥 Tombol Delete Ticket */}
                     <button
                       className="delete-button"
                       onClick={() => deleteTicket(ticket.ticketId)}
