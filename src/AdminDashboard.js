@@ -121,8 +121,11 @@ function AdminDashboard() {
         <option value="Event 4">🎟️ Event 4</option>
       </select>
 
+      {/* 🔥 Export Button dengan Filter */}
       <a
-        href="https://ktm-ticketing-backend-production.up.railway.app/tickets/export-excel"
+        href={`https://ktm-ticketing-backend-production.up.railway.app/tickets/export-excel${
+          selectedEvent ? `?event=${encodeURIComponent(selectedEvent)}` : ""
+        }`}
         download
       >
         <button className="export-button">📥 Export ke Excel</button>

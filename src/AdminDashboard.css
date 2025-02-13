@@ -241,6 +241,94 @@ input[type="text"]:focus {
         background-color: #eaffea;
     }
 }
+/* ✅ Styling untuk dropdown filter */
+select {
+    width: 200px;
+    padding: 8px;
+    font-size: 16px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 10px 0;
+}
+
+/* ✅ Efek hover & fokus */
+select:hover,
+select:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+/* ✅ Style untuk tombol export */
+.export-button {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.export-button:hover {
+    background-color: #218838;
+}
+
+/* ✅ Styling tabel agar lebih menarik */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 16px;
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.styled-table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.styled-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* ✅ Efek highlight saat check-in */
+.highlight-hadir {
+    background-color: #d4edda !important;
+    transition: background-color 0.5s ease-in-out;
+}
+
+/* ✅ Styling untuk tidak ada data */
+.no-data {
+    text-align: center;
+    font-style: italic;
+    color: #999;
+}
+
+/* ✅ Styling untuk responsif */
+@media (max-width: 768px) {
+    select {
+        width: 100%;
+    }
+
+    .export-button {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+}
 
 /* 📱 Responsiveness untuk HP */
 @media screen and (max-width: 768px) {
